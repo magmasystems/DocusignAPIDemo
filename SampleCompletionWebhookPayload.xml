@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DocuSignEnvelopeInformation
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.docusign.net/API/3.0" xsi:schemaLocation="http://www.docusign.net/API/3.0 ">
+    <EnvelopeStatus>
+        <RecipientStatuses>
+            <RecipientStatus>
+                <Type>Signer</Type>
+                <Email>magmasystems@yahoo.com</Email>
+                <UserName>John Reynolds</UserName>
+                <RoutingOrder>1</RoutingOrder>
+                <Sent>2020-06-03T21:37:35.447</Sent>
+                <Delivered>2020-06-03T21:38:51.223</Delivered>
+                <Signed>2020-06-03T21:38:58.6</Signed>
+                <DeclineReason xsi:nil="true"/>
+                <Status>Completed</Status>
+                <RecipientIPAddress>71.167.31.91</RecipientIPAddress>
+                <CustomFields/>
+                <TabStatuses>
+                    <TabStatus>
+                        <TabType>Title</TabType>
+                        <Status>Signed</Status>
+                        <XPosition>256</XPosition>
+                        <YPosition>452</YPosition>
+                        <TabLabel>Title eb9ab6f6-27e3-48a4-93bc-ac659c9c13c4</TabLabel>
+                        <TabName/>
+                        <TabValue>Head Honcho</TabValue>
+                        <DocumentID>1</DocumentID>
+                        <PageNumber>5</PageNumber>
+                    </TabStatus>
+                    <TabStatus>
+                        <TabType>FullName</TabType>
+                        <Status>Signed</Status>
+                        <XPosition>256</XPosition>
+                        <YPosition>415</YPosition>
+                        <TabLabel>Name 7f8f596d-fabb-48a0-a33c-4877c724c175</TabLabel>
+                        <TabName>FullName</TabName>
+                        <TabValue>John Reynolds</TabValue>
+                        <DocumentID>1</DocumentID>
+                        <PageNumber>5</PageNumber>
+                    </TabStatus>
+                    <TabStatus>
+                        <TabType>FullName</TabType>
+                        <Status>Signed</Status>
+                        <XPosition>940</XPosition>
+                        <YPosition>223</YPosition>
+                        <TabLabel>Name 6000c653-fa23-4bc9-8e94-de69316dc6bc</TabLabel>
+                        <TabName>FullName</TabName>
+                        <TabValue>John Reynolds</TabValue>
+                        <DocumentID>1</DocumentID>
+                        <PageNumber>1</PageNumber>
+                    </TabStatus>
+                    <TabStatus>
+                        <TabType>SignHere</TabType>
+                        <Status>Signed</Status>
+                        <XPosition>242</XPosition>
+                        <YPosition>292</YPosition>
+                        <TabLabel>Signature 2e2e6ad7-0639-47f1-9465-0072c740c89b</TabLabel>
+                        <TabName>SignHere</TabName>
+                        <TabValue/>
+                        <DocumentID>1</DocumentID>
+                        <PageNumber>5</PageNumber>
+                    </TabStatus>
+                    <TabStatus>
+                        <TabType>DateSigned</TabType>
+                        <Status>Signed</Status>
+                        <XPosition>254</XPosition>
+                        <YPosition>490</YPosition>
+                        <TabLabel>Date Signed 4277fd00-f334-490f-9717-af76263e6335</TabLabel>
+                        <TabName>DateSigned</TabName>
+                        <TabValue>6/3/2020</TabValue>
+                        <DocumentID>1</DocumentID>
+                        <PageNumber>5</PageNumber>
+                    </TabStatus>
+                    <TabStatus>
+                        <TabType>DateSigned</TabType>
+                        <Status>Signed</Status>
+                        <XPosition>150</XPosition>
+                        <YPosition>219</YPosition>
+                        <TabLabel>Date Signed 8b2ee89d-3450-4f20-a836-f6d8526dc102</TabLabel>
+                        <TabName>DateSigned</TabName>
+                        <TabValue>6/3/2020</TabValue>
+                        <DocumentID>1</DocumentID>
+                        <PageNumber>1</PageNumber>
+                    </TabStatus>
+                </TabStatuses>
+                <RecipientAttachment>
+                    <Attachment>
+                        <Data>
+                            PEZvcm1EYXRhPjx4ZmRmPjxmaWVsZHM+PGZpZWxkIG5hbWU9IlRpdGxlIj48dmFsdWU+SGVhZCBIb25jaG88L3ZhbHVlPjwvZmllbGQ+PGZpZWxkIG5hbWU9IkZ1bGxOYW1lIj48dmFsdWU+Sm9obiBSZXlub2xkczwvdmFsdWU+PC9maWVsZD48ZmllbGQgbmFtZT0iRGF0ZVNpZ25lZCI+PHZhbHVlPjYvMy8yMDIwPC92YWx1ZT48L2ZpZWxkPjwvZmllbGRzPjwveGZkZj48L0Zvcm1EYXRhPg==
+                        </Data>
+                        <Label>DSXForm</Label>
+                    </Attachment>
+                </RecipientAttachment>
+                <AccountStatus>Active</AccountStatus>
+                <FormData>
+                    <xfdf>
+                        <fields>
+                            <field name="Title">
+                                <value>Head Honcho</value>
+                            </field>
+                            <field name="FullName">
+                                <value>John Reynolds</value>
+                            </field>
+                            <field name="DateSigned">
+                                <value>6/3/2020</value>
+                            </field>
+                        </fields>
+                    </xfdf>
+                </FormData>
+                <RecipientId>be344f0d-3442-4e7a-94a3-66630db12878</RecipientId>
+            </RecipientStatus>
+        </RecipientStatuses>
+        <TimeGenerated>2020-06-03T21:39:19.1877881</TimeGenerated>
+        <EnvelopeID>02690b00-1cd5-4a48-9754-d0d147494b1f</EnvelopeID>
+        <Subject>Please DocuSign: Robyn BAA for Docusign.pdf</Subject>
+        <UserName>Marc Adler</UserName>
+        <Email>info@ctoasaservice.org</Email>
+        <Status>Completed</Status>
+        <Created>2020-06-03T21:37:34.54</Created>
+        <Sent>2020-06-03T21:37:35.477</Sent>
+        <Delivered>2020-06-03T21:38:51.397</Delivered>
+        <Signed>2020-06-03T21:38:58.6</Signed>
+        <Completed>2020-06-03T21:38:58.6</Completed>
+        <ACStatus>Original</ACStatus>
+        <ACStatusDate>2020-06-03T21:37:34.54</ACStatusDate>
+        <ACHolder>Marc Adler</ACHolder>
+        <ACHolderEmail>info@ctoasaservice.org</ACHolderEmail>
+        <ACHolderLocation>DocuSign</ACHolderLocation>
+        <SigningLocation>Online</SigningLocation>
+        <SenderIPAddress>71.167.31.91</SenderIPAddress>
+        <EnvelopePDFHash/>
+        <CustomFields>
+            <CustomField>
+                <Name>templateUsageRestriction</Name>
+                <Show>False</Show>
+                <Required>False</Required>
+                <Value>allOptions</Value>
+            </CustomField>
+        </CustomFields>
+        <AutoNavigation>true</AutoNavigation>
+        <EnvelopeIdStamping>true</EnvelopeIdStamping>
+        <AuthoritativeCopy>false</AuthoritativeCopy>
+        <DocumentStatuses>
+            <DocumentStatus>
+                <ID>1</ID>
+                <Name>Robyn BAA for Docusign.pdf</Name>
+                <TemplateName>Robyn BAA</TemplateName>
+                <Sequence>1</Sequence>
+            </DocumentStatus>
+        </DocumentStatuses>
+    </EnvelopeStatus>
+</DocuSignEnvelopeInformation>

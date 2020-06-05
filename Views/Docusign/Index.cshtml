@@ -1,0 +1,18 @@
+@model DocuSign.eSign.Model.EnvelopeTemplate
+
+@{
+    ViewBag.Title = "DocuSign Templates";
+}
+
+@using (Html.BeginForm())
+{
+    <div class="text-left">
+        <p>@Html.LabelFor(m => m.Name, new {style = "width:200px"}) @Html.TextBoxFor(m => m.Name, new {style = "width:500px"})</p>
+        <p>@Html.LabelFor(m => m.Uri, new {style = "width:200px"}) @Html.TextBoxFor(m => m.Uri, new {style = "width:500px"})</p>
+        <p>@Html.LabelFor(m => m.TemplateId, new {style = "width:200px"}) @Html.TextBoxFor(m => m.TemplateId, new {style = "width:500px"})</p>
+    </div>
+
+    <hr/>
+
+    <input type="submit" name="btnSendDocument" value="Send" formaction="/Docusign/Send" formmethod="post"/>
+}
