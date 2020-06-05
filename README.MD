@@ -6,11 +6,15 @@ The first thing that you need to do is to add a new application through the Docu
 
 <https://admindemo.docusign.com/api-integrator-key>
 
+![Add Docusign App](./Documentation/Images/AddDocusignApp.png)
+
 Name your new app. Fill in something for the terms, the privacy policy, and the redirect URI (they can be any values, but they cannot be empty).
 
 You will need to create a new RSA Keypair. Make sure that you download the private key file that is created. You will need this private key in your C# code when you make the call to the Docusign authorization API.
 
 Also, copy down your Integration Key. This is a GUID that you will need in your C# code when you make the call to the Docusign authorization API.
+
+![Configure Docusign App](./Documentation/Images/ConfigureDocusignApp.png)
 
 Now that the application is set up, we can start coding.
 
@@ -105,6 +109,8 @@ public IActionResult Index()
 }
 ```
 
+## Using DocuSign Connect to Get Notifications
+
 This is a simple Webhook that you can use to process the callbacks from DocuSign when certain interesting events happen. We take the XML that Docusign puts in the payload, and deserialize it into a custom class that we created. We take the important fields from this payload, and we create a small object that we can pass to other functions. We would probably want to look up the Robyn user by the email address, and we want to store the “TimeSigned” value into their user record in the database.
 
 ```cs
@@ -183,6 +189,16 @@ Pay attention to the line that says:
 You will need to tell the DocuSign admin console that <https://276d59629e7e.ngrok.io> is the server where your webhook is. Note that this address will change every time that you restart ngrok.
 
 You have to go into the DocuSign Connect dashboard, highlight the Robyn application, and change the URL of the webhook to the server that ngrok printed out.
+
+---
+
+![Create Connection](./Documentation/Images/CreateConnection.png)
+
+---
+
+![Configure Connection](./Documentation/Images/ConfigureConnection.png)
+
+---
 
 If you want to monitor the messages that ngrok processes, go into Chrome and go to `localhost:4040`.
 
