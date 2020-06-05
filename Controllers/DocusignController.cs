@@ -47,8 +47,8 @@ namespace DocusignAPIDemo.Controllers
                     Console.WriteLine(email);
             }
 
-            // Get the first and only template
-            var docusignTemplate = this.DocusignService.FindTemplate(ApiClient, t => true);
+            // Get the Robyn BAA template
+            var docusignTemplate = this.DocusignService.FindTemplate(ApiClient, t => t.Name.Equals("Robyn BAA", StringComparison.OrdinalIgnoreCase));
             return View("Index", new DocusignSigningInfo { EnvelopeTemplate = docusignTemplate, Customer = this.Customer });
         }
         #endregion
