@@ -2,7 +2,7 @@
 
 ## Creating a New DocuSign Application
 
-The first thing that you need to do is to add a new application through the DocuSign admin console. Go to the API and Keys section of the eSignature console. Clicking on the yellow “Add App/Integration Key” button brings up a new page where you can specify the details of the new app.
+The first thing that you need to do is to add a new application through the DocuSign admin console. Let's say that this application is called *Robyn*. Go to the API and Keys section of the eSignature console. Clicking on the yellow “Add App/Integration Key” button brings up a new page where you can specify the details of the new app.
 
 <https://admindemo.docusign.com/api-integrator-key>
 
@@ -16,7 +16,7 @@ Now that the application is set up, we can start coding.
 
 ## Writing a Web App that uses DocuSign
 
-We need to use a JWT authentication token for every request that we make to the DocuSign API. Before we make a call to the DocuSign API, we should call ConfigureApiClientAuth(ApiClient apiClient) in order to make sure that we have a valid token. The token will expire, so we need to refresh the token when it expires.
+We need to use a JWT authentication token for every request that we make to the DocuSign API. Before we make a call to the DocuSign API, we should call `ConfigureApiClientAuth(ApiClient apiClient)` in order to make sure that we have a valid token. The token will expire, so we need to refresh the token when it expires.
 
 ```cs
 private static string AccessToken { get; set; }
@@ -60,7 +60,7 @@ As an example, here is a way that you can fetch the DocuSign template for the Ro
 
 The appsettings.json file has various configuration values that are associated with the DocuSign account.
 
-In the constructor, we create the DocuSign ApiClient.
+In the constructor, we create the DocuSign `ApiClient`.
 
 We will call the DocuSign API to list out all of the templates that our account owns. First, we make sure that we have a valid authentication token. Then we use the DocuSign TemplateAPI to get a list of the templates. Finally, we fetch the individual template.
 
@@ -184,12 +184,14 @@ You will need to tell the DocuSign admin console that <https://276d59629e7e.ngro
 
 You have to go into the DocuSign Connect dashboard, highlight the Robyn application, and change the URL of the webhook to the server that ngrok printed out.
 
-If you want to monitor the messages that ngrok processes, go into Chrome and go to localhost:4040.
+If you want to monitor the messages that ngrok processes, go into Chrome and go to `localhost:4040`.
 
 Let’s say that the webhook can be reached at <https://276d59629e7e.ngrok.io/DocusignWebhook>
 
 You can test the webhook using Postman:
 
-If you have a breakpoint set at the webhook, the breakpoint should be hit. Also, the message should be seen in the ngrok console on Chrome (localhost:4040).
+![Postman](./Documentation/Images/Postman.png)
+
+If you have a breakpoint set at the webhook, the breakpoint should be hit. Also, the message should be seen in the ngrok console on Chrome (`localhost:4040`).
 
 Now you can try DocuSign. Run your sample app, send out a document to be signed, wait for the recipient to sign it, and wait for the webhook to be called.
