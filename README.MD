@@ -147,9 +147,9 @@ In the appsettings.Development.json file, we have some settings that are importa
 {
     "authServer": "account-d.docusign.com",
     "url":        "https://demo.docusign.net/restapi",
-    "accountId":  "10682266",
-    "clientId":   "94a66e12-5611-4ace-8ab5-c16a8ab0172a",
-    "userId":     "756a9428-b0fe-4cfb-8203-1a6fed6666af",
+    "accountId":  "[INSERT YOUR DOCUSIGN ACCOUNT ID HERE]",
+    "clientId":   "[INSERT YOUR DOCUSIGN APP INTEGRATION KEY HERE]",
+    "userId":     "[INSERT YOUR DOCUSIGN USER ID HERE]",
     "privateKeyFile": "Docusign.RSA.privatekey.txt",
 }
 ```
