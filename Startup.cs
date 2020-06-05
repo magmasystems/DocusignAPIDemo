@@ -24,6 +24,7 @@ namespace DocusignAPIDemo
             services.AddControllers();
 
             services.AddSingleton<IDocusignAuthenticator, DocusignAuthenticator>();
+            services.AddSingleton<IDocusignService, DocusignService>();
             
             // VERY IMPORTANT FOR THE DOCUSIGN WEBHOOKS
             services.Configure<KestrelServerOptions>(options =>

@@ -1,4 +1,4 @@
-@model DocuSign.eSign.Model.EnvelopeTemplate
+@model DocusignSigningInfo
 
 @{
     ViewBag.Title = "DocuSign Templates";
@@ -7,9 +7,11 @@
 @using (Html.BeginForm())
 {
     <div class="text-left">
-        <p>@Html.LabelFor(m => m.Name, new {style = "width:200px"}) @Html.TextBoxFor(m => m.Name, new {style = "width:500px"})</p>
-        <p>@Html.LabelFor(m => m.Uri, new {style = "width:200px"}) @Html.TextBoxFor(m => m.Uri, new {style = "width:500px"})</p>
-        <p>@Html.LabelFor(m => m.TemplateId, new {style = "width:200px"}) @Html.TextBoxFor(m => m.TemplateId, new {style = "width:500px"})</p>
+        <p>@Html.LabelFor(m => m.EnvelopeTemplate.Name, new {style = "width:200px"}) @Html.TextBoxFor(m => m.EnvelopeTemplate.Name, new {style = "width:500px"})</p>
+        <p>@Html.LabelFor(m => m.EnvelopeTemplate.Uri, new {style = "width:200px"}) @Html.TextBoxFor(m => m.EnvelopeTemplate.Uri, new {style = "width:500px"})</p>
+        <p>@Html.LabelFor(m => m.EnvelopeTemplate.TemplateId, new {style = "width:200px"}) @Html.TextBoxFor(m => m.EnvelopeTemplate.TemplateId, new {style = "width:500px"})</p>
+        <hr/>
+        <p>@Html.EditorFor(m => m.Customer)</p>
     </div>
 
     <hr/>
