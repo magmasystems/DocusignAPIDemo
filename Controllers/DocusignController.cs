@@ -66,8 +66,7 @@ namespace DocusignAPIDemo.Controllers
         [HttpPost]
         public IActionResult Send(EnvelopeTemplate docusignTemplate)
         {
-            EnvelopeSummary result = null;
-            
+            EnvelopeSummary result;
             try
             {
                 this.DocusignAuthenticator.Authenticate(ApiClient);
