@@ -13,10 +13,13 @@ namespace DocusignAPIDemo.Controllers
 {
     public class DocusignController : Controller
     {
+        #region Variables
         private ILogger<DocusignController> Logger { get; }
         private IConfiguration Configuration { get; }
         private static ApiClient ApiClient { get; set; }
+        #endregion
 
+        #region Constructors
         public DocusignController(ILogger<DocusignController> logger, IConfiguration config)
         {
             this.Logger = logger;
@@ -26,15 +29,17 @@ namespace DocusignAPIDemo.Controllers
             ApiClient = new ApiClient(basePath);
             //this.ConfigureApiClientAuth(ApiClient);
         }
+        #endregion
         
-        // GET
+        #region Gets a template from DocuSign
+        [HttpGet]
         public IActionResult Index()
         {
             EnvelopeTemplate docusignTemplate = null;
             
             try
             {
-                this.ConfigureApiClientAuth2(ApiClient);
+                this.ConfigureApiClientAuth(ApiClient);
             
                 var accountId = this.Configuration["Docusign:accountId"];
                 var templatesApi = new TemplatesApi(ApiClient.Configuration);
@@ -55,7 +60,9 @@ namespace DocusignAPIDemo.Controllers
             
             return View("Index", docusignTemplate);
         }
+        #endregion
 
+        #region Sends a template to be signed by a recipient
         [HttpPost]
         public IActionResult Send(EnvelopeTemplate docusignTemplate)
         {
@@ -72,7 +79,8 @@ namespace DocusignAPIDemo.Controllers
                     TemplateId = docusignTemplate.TemplateId,
                     Status = "sent",
                     TemplateRoles = new List<TemplateRole> 
-                    { 
+                    {
+                        // TODO: his is just some sample data. Replace it with the actual recipient.
                         new TemplateRole
                         {
                             Email = "magmasystems@yahoo.com", 
@@ -93,12 +101,11 @@ namespace DocusignAPIDemo.Controllers
             
             return View("DocumentSendResult", result);
         }
-        
-       
-        // https://github.com/docusign/eg-01-csharp-jwt-core/blob/master/common/ExampleBase.cs
-        // https://github.com/docusign/code-examples-csharp/blob/master/launcher-csharp/Common/RequestItemService.cs
+        #endregion
 
-        private void ConfigureApiClientAuth2(ApiClient apiClient)
+        #region DocuSign Authentication
+        #if NOTUSED
+        private void ConfigureApiClientAuth_OldMethod(ApiClient apiClient)
         {
             var username = this.Configuration["Docusign:username"];
             var password = this.Configuration["Docusign:password"];
@@ -109,6 +116,7 @@ namespace DocusignAPIDemo.Controllers
             var authApi = new AuthenticationApi();
             authApi.Login();
         }
+        #endif
 
         private void ConfigureApiClientAuth(ApiClient apiClient)
         {
@@ -145,32 +153,6 @@ namespace DocusignAPIDemo.Controllers
             if (authToken.expires_in != null) 
                 ExpiresIn = DateTime.UtcNow.AddSeconds(authToken.expires_in.Value);
         }
-    }
-    
-    internal class DSHelper
-    {
-        internal static string PrepareFullPrivateKeyFilePath(string fileName)
-        {
-            const string DefaultRSAPrivateKeyFileName = "docusign_private_key.txt";
-
-            var fileNameOnly = Path.GetFileName(fileName);
-            if (string.IsNullOrEmpty(fileNameOnly))
-            {
-                fileNameOnly = DefaultRSAPrivateKeyFileName;
-            }
-
-            var filePath = Path.GetDirectoryName(fileName);
-            if (string.IsNullOrEmpty(filePath))
-            {
-                filePath = Directory.GetCurrentDirectory();
-            }
-
-            return Path.Combine(filePath, fileNameOnly);
-        }
-
-        internal static byte[] ReadFileContent(string path)
-        {
-            return File.ReadAllBytes(path);
-        }
+        #endregion
     }
 }
