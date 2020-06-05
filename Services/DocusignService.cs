@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using DocuSign.eSign.Api;
 using DocuSign.eSign.Client;
 using DocuSign.eSign.Model;
@@ -12,9 +13,10 @@ namespace DocusignAPIDemo.Services
 {
     public interface IDocusignService
     {
-         EnvelopeTemplate GetTemplate(ApiClient apiClient);
-         EnvelopeSummary SignThroughEmail(ApiClient apiClient, DocusignSigningInfo signingInfo);
-         ViewUrl SignThroughEmbedding(HttpRequest httpRequest, ApiClient apiClient, DocusignSigningInfo signingInfo);
+        IEnumerable<EnvelopeTemplate> GetTemplates(ApiClient apiClient, Action<EnvelopeTemplate> callback = null);
+        EnvelopeTemplate FindTemplate(ApiClient apiClient, Predicate<EnvelopeTemplate> match);
+        EnvelopeSummary SignThroughEmail(ApiClient apiClient, DocusignSigningInfo signingInfo);
+        ViewUrl SignThroughEmbedding(HttpRequest httpRequest, ApiClient apiClient, DocusignSigningInfo signingInfo);
     }
 
     public class DocusignService : IDocusignService
@@ -33,10 +35,34 @@ namespace DocusignAPIDemo.Services
             this.AccountId = this.Configuration["Docusign:accountId"];
         }
 
-        public EnvelopeTemplate GetTemplate(ApiClient apiClient)
+        public IEnumerable<EnvelopeTemplate> GetTemplates(ApiClient apiClient, Action<EnvelopeTemplate> callback = null)
+        {               
+            try
+            {
+                this.DocusignAuthenticator.Authenticate(apiClient);
+            
+                var templatesApi = new TemplatesApi(apiClient.Configuration);
+                var templates = templatesApi.ListTemplates(this.AccountId);
+
+                if (callback != null)
+                {
+                    foreach (var template in templates.EnvelopeTemplates)
+                    {
+                        callback(template);
+                    }
+                }
+
+                return templates.EnvelopeTemplates.ToList();
+            }
+            catch (Exception e)
+            {
+                this.Logger.LogError(e.Message);
+                throw;
+            }
+        }
+
+        public EnvelopeTemplate FindTemplate(ApiClient apiClient, Predicate<EnvelopeTemplate> match)
         {            
-            EnvelopeTemplate docusignTemplate = null;
-                        
             try
             {
                 this.DocusignAuthenticator.Authenticate(apiClient);
@@ -46,11 +72,10 @@ namespace DocusignAPIDemo.Services
 
                 foreach (var template in templates.EnvelopeTemplates)
                 {
-                    docusignTemplate = template;
+                    if (match(template))
+                        return templatesApi.Get(this.AccountId, template.TemplateId);
                 }
-
-                docusignTemplate = templatesApi.Get(this.AccountId, docusignTemplate.TemplateId);
-                return docusignTemplate;
+                return null;
             }
             catch (Exception e)
             {

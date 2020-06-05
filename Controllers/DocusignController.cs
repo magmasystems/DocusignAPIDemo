@@ -47,7 +47,8 @@ namespace DocusignAPIDemo.Controllers
                     Console.WriteLine(email);
             }
 
-            var docusignTemplate = this.DocusignService.GetTemplate(ApiClient);
+            // Get the first and only template
+            var docusignTemplate = this.DocusignService.FindTemplate(ApiClient, t => true);
             return View("Index", new DocusignSigningInfo { EnvelopeTemplate = docusignTemplate, Customer = this.Customer });
         }
         #endregion
