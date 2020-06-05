@@ -1,3 +1,4 @@
+using DocusignAPIDemo.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
@@ -21,6 +22,8 @@ namespace DocusignAPIDemo
         {
             services.AddControllersWithViews();
             services.AddControllers();
+
+            services.AddSingleton<IDocusignAuthenticator, DocusignAuthenticator>();
             
             // VERY IMPORTANT FOR THE DOCUSIGN WEBHOOKS
             services.Configure<KestrelServerOptions>(options =>

@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using DocuSign.eSign.Api;
 using DocuSign.eSign.Client;
 using DocuSign.eSign.Model;
-using DocusignAPIDemo.Models;
+using DocusignAPIDemo.Services;
 
 namespace DocusignAPIDemo.Controllers
 {
@@ -16,18 +15,19 @@ namespace DocusignAPIDemo.Controllers
         #region Variables
         private ILogger<DocusignController> Logger { get; }
         private IConfiguration Configuration { get; }
+        private IDocusignAuthenticator DocusignAuthenticator { get; }
         private static ApiClient ApiClient { get; set; }
         #endregion
 
         #region Constructors
-        public DocusignController(ILogger<DocusignController> logger, IConfiguration config)
+        public DocusignController(ILogger<DocusignController> logger, IConfiguration config, IDocusignAuthenticator authenticator)
         {
             this.Logger = logger;
             this.Configuration = config;
+            this.DocusignAuthenticator = authenticator;
             
             var basePath = this.Configuration["Docusign:url"];
             ApiClient = new ApiClient(basePath);
-            //this.ConfigureApiClientAuth(ApiClient);
         }
         #endregion
         
@@ -39,7 +39,7 @@ namespace DocusignAPIDemo.Controllers
             
             try
             {
-                this.ConfigureApiClientAuth(ApiClient);
+                this.DocusignAuthenticator.Authenticate(ApiClient);
             
                 var accountId = this.Configuration["Docusign:accountId"];
                 var templatesApi = new TemplatesApi(ApiClient.Configuration);
@@ -70,6 +70,8 @@ namespace DocusignAPIDemo.Controllers
             
             try
             {
+                this.DocusignAuthenticator.Authenticate(ApiClient);
+
                 var accountId = this.Configuration["Docusign:accountId"];
                 var templatesApi = new TemplatesApi(ApiClient.Configuration);
                 var envelopeApi = new EnvelopesApi(ApiClient.Configuration);
@@ -102,57 +104,5 @@ namespace DocusignAPIDemo.Controllers
             return View("DocumentSendResult", result);
         }
         #endregion
-
-        #region DocuSign Authentication
-        #if NOTUSED
-        private void ConfigureApiClientAuth_OldMethod(ApiClient apiClient)
-        {
-            var username = this.Configuration["Docusign:username"];
-            var password = this.Configuration["Docusign:password"];
-            var integratorKey = this.Configuration["Docusign:clientId"];
-            var authHeader = $"{{\"Username\":\"{username}\", \"Password\":\"{password}\", \"IntegratorKey\":\"{integratorKey}\"}}";
-            apiClient.Configuration.AddDefaultHeader("X-DocuSign-Authentication", authHeader);
-
-            var authApi = new AuthenticationApi();
-            authApi.Login();
-        }
-        #endif
-
-        private void ConfigureApiClientAuth(ApiClient apiClient)
-        {
-            this.CheckToken();
-            apiClient.Configuration.AddDefaultHeader("Authorization", $"Bearer {AccessToken}");
-        }
-        
-        private static string AccessToken { get; set; }
-        private static DateTime ExpiresIn;
-        
-        public void CheckToken()
-        {
-            if (AccessToken != null && DateTime.UtcNow <= ExpiresIn) 
-                return;
-            
-            this.UpdateToken();
-        }
-        
-        private void UpdateToken()
-        {
-            var clientId = this.Configuration["Docusign:clientId"];
-            var impersonatedUserGuid = this.Configuration["Docusign:userId"];
-            var authServer = this.Configuration["Docusign:authServer"];
-            var privateKey = System.IO.File.ReadAllBytes(this.Configuration["Docusign:privateKeyFile"]);
-            
-            var authToken = ApiClient.RequestJWTUserToken(
-                clientId,
-                impersonatedUserGuid,
-                authServer,
-                privateKey,
-                1);
-
-            AccessToken = authToken.access_token;
-            if (authToken.expires_in != null) 
-                ExpiresIn = DateTime.UtcNow.AddSeconds(authToken.expires_in.Value);
-        }
-        #endregion
-    }
+   }
 }
