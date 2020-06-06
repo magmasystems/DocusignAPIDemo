@@ -109,6 +109,16 @@ public IActionResult Index()
 }
 ```
 
+## Embedding vs Email
+
+There are two ways to get a signature in DocuSign.
+
+One way is to send a document to a signer through email. We can use a webhook to get a push notification as to the status of that document.
+
+The other way is to embed the document signing process within the web app, and when the signer has completed the process, DocuSign redirects the user to a URL that you provide.
+
+A good resource that discusses embedded signing is [here](https://developers.docusign.com/esign-rest-api/code-examples/code-example-embedded-signing).
+
 ## Using DocuSign Connect to Get Notifications
 
 This is a simple Webhook that you can use to process the callbacks from DocuSign when certain interesting events happen. We take the XML that Docusign puts in the payload, and deserialize it into a custom class that we created. We take the important fields from this payload, and we create a small object that we can pass to other functions. We would probably want to look up the Robyn user by the email address, and we want to store the “TimeSigned” value into their user record in the database.
