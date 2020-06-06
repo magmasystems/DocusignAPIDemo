@@ -120,7 +120,7 @@ namespace DocusignAPIDemo.Services
                 var envelopeDefinition = this.CreateEnvelopeFromTemplate(signingInfo.EnvelopeTemplate, signingInfo.Customer);
                 var envelope = envelopeApi.CreateEnvelope(this.AccountId, envelopeDefinition);
 
-                var viewRequest = this.MakeRecipientViewRequest(httpRequest, signingInfo.Customer);
+                var viewRequest = this.MakeRecipientViewRequest(httpRequest, signingInfo.Customer, envelope.EnvelopeId);
 
                 // This will send the document to the signer through browser embedding. We will use the webhook to detect when it was signed.
                 var result = envelopeApi.CreateRecipientView(this.AccountId, envelope.EnvelopeId, viewRequest);
@@ -167,7 +167,7 @@ namespace DocusignAPIDemo.Services
         /// https://developers.docusign.com/esign-rest-api/code-examples/code-example-embedded-signing
         /// https://github.com/docusign/code-examples-csharp/blob/master/launcher-csharp/Controllers/Eg001EmbeddedSigningController.cs
         /// </summary>
-        private RecipientViewRequest MakeRecipientViewRequest(HttpRequest request, RobynCustomer customer)
+        private RecipientViewRequest MakeRecipientViewRequest(HttpRequest request, RobynCustomer customer, string envelopeId)
         {
             // Data for this method
             // signerEmail 
@@ -185,7 +185,8 @@ namespace DocusignAPIDemo.Services
             // can be changed/spoofed very easily.
             RecipientViewRequest viewRequest = new RecipientViewRequest
             {
-                ReturnUrl =  $"{request.Scheme}://{request.Host}/Docusign?email={customer.Email}",
+                ReturnUrl = 
+                 $"{request.Scheme}://{request.Host}/Docusign/EmbeddedSigningProcessor?email={customer.Email}&envelopeId={envelopeId}",
 
                 // How has your app authenticated the user? In addition to your app's
                 // authentication, you can include authenticate steps from DocuSign.

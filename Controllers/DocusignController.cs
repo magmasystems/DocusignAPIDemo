@@ -69,6 +69,21 @@ namespace DocusignAPIDemo.Controllers
             var result = this.DocusignService.SignThroughEmbedding(this.Request, ApiClient, signingInfo);
             return this.Redirect(result.Url);
         }
+
+        [HttpGet]
+        public IActionResult EmbeddedSigningProcessor(string email, string @event, string envelopeId)
+        {
+            // After an embedded signing, the event should be "signing_complete" and the email should be the email of the signer
+            if (!string.IsNullOrEmpty(@event))
+            {
+                Console.WriteLine($"Event: {@event}, Email: {email}, EnvId: {envelopeId}");
+            }
+
+            // At this point, assuming that there is a customer record in the database that has a field that records
+            // the status and the time of the signing, we can update the database before returning to the main web page.
+
+            return LocalRedirect("~/Docusign");
+        }
         #endregion
    }
 }
