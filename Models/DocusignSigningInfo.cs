@@ -5,6 +5,6 @@ namespace DocusignAPIDemo.Models
     public class DocusignSigningInfo
     {
         public EnvelopeTemplate EnvelopeTemplate { get; set; }
-        public RobynCustomer Customer { get; set; }
+        public SampleCustomer Customer { get; set; }
     }
 }

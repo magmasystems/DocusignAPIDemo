@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using DocuSign.eSign.Client;
-using DocuSign.eSign.Model;
 using DocusignAPIDemo.Services;
 using System;
 using DocusignAPIDemo.Models;
@@ -15,9 +14,8 @@ namespace DocusignAPIDemo.Controllers
         private ILogger<DocusignController> Logger { get; }
         private IConfiguration Configuration { get; }
         private IDocusignService DocusignService{ get; }
-        
-        private static ApiClient ApiClient { get; set; }
-        private RobynCustomer Customer { get; set; }
+        private SampleCustomer Customer { get; set; }
+        private string TemplateName { get; set; }
         #endregion
 
         #region Constructors
@@ -25,15 +23,22 @@ namespace DocusignAPIDemo.Controllers
         {
             this.Logger = logger;
             this.Configuration = config;
-            this.DocusignService = docusignService;
-            
-            var basePath = this.Configuration["Docusign:url"];
-            ApiClient = new ApiClient(basePath);
 
-            this.Customer = new RobynCustomer { Name = "John Reynolds", Email = "magmasystems@yahoo.com", Title = "Head Honcho", SignerId = "666" };
+            this.DocusignService = docusignService;
+            this.DocusignService.ApiClient = new ApiClient(this.Configuration["Docusign:url"]);
+
+            // Sample data
+            this.Customer = new SampleCustomer 
+            { 
+                Name = config["SampleData:Customer:Name"], 
+                Email = config["SampleData:Customer:Email"], 
+                Title = config["SampleData:Customer:Title"], 
+                SignerId = config["SampleData:Customer:SignerId"] 
+            };
+            this.TemplateName = config["SampleData:TemplateName"];
         }
         #endregion
-        
+
         #region Gets a template from DocuSign
         [HttpGet]
         public IActionResult Index(string @event, string email)
@@ -47,8 +52,8 @@ namespace DocusignAPIDemo.Controllers
                     Console.WriteLine(email);
             }
 
-            // Get the Robyn BAA template
-            var docusignTemplate = this.DocusignService.FindTemplate(ApiClient, t => t.Name.Equals("Robyn BAA", StringComparison.OrdinalIgnoreCase));
+            // Get the sample template
+            var docusignTemplate = this.DocusignService.GetTemplate(this.TemplateName);
             return View("Index", new DocusignSigningInfo { EnvelopeTemplate = docusignTemplate, Customer = this.Customer });
         }
         #endregion
@@ -57,7 +62,7 @@ namespace DocusignAPIDemo.Controllers
         [HttpPost]
         public IActionResult Send(DocusignSigningInfo signingInfo)
         {
-            var result = this.DocusignService.SignThroughEmail(ApiClient, signingInfo);
+            var result = this.DocusignService.SignThroughEmail(signingInfo);
             return View("DocumentSendResult", result);
         }
         #endregion
@@ -66,7 +71,7 @@ namespace DocusignAPIDemo.Controllers
         [HttpPost]
         public IActionResult EmbeddedSigning(DocusignSigningInfo signingInfo)
         {
-            var result = this.DocusignService.SignThroughEmbedding(this.Request, ApiClient, signingInfo);
+            var result = this.DocusignService.SignThroughEmbedding(this.Request, signingInfo);
             return this.Redirect(result.Url);
         }
 

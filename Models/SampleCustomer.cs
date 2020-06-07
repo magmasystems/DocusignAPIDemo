@@ -1,6 +1,6 @@
 namespace DocusignAPIDemo.Models
 {
-    public class RobynCustomer
+    public class SampleCustomer
     {
         public string Name  { get; set; }
         public string Email { get; set; }

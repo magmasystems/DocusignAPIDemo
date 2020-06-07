@@ -11,21 +11,31 @@ using Microsoft.Extensions.Logging;
 
 namespace DocusignAPIDemo.Services
 {
-    public interface IDocusignService
+    #region Interface
+    public interface IDocusignService : IDisposable
     {
-        IEnumerable<EnvelopeTemplate> GetTemplates(ApiClient apiClient, Action<EnvelopeTemplate> callback = null);
-        EnvelopeTemplate FindTemplate(ApiClient apiClient, Predicate<EnvelopeTemplate> match);
-        EnvelopeSummary SignThroughEmail(ApiClient apiClient, DocusignSigningInfo signingInfo);
-        ViewUrl SignThroughEmbedding(HttpRequest httpRequest, ApiClient apiClient, DocusignSigningInfo signingInfo);
+        ApiClient ApiClient { get; set; }
+
+        IEnumerable<EnvelopeTemplate> GetTemplates(Action<EnvelopeTemplate> callback = null);
+        EnvelopeTemplate GetTemplate(string templateName);
+        EnvelopeTemplate FindTemplate(Predicate<EnvelopeTemplate> match);
+        EnvelopeSummary SignThroughEmail(DocusignSigningInfo signingInfo);
+        ViewUrl SignThroughEmbedding(HttpRequest httpRequest, DocusignSigningInfo signingInfo);
     }
+    #endregion
 
     public class DocusignService : IDocusignService
     {
+        #region Variables
         private IDocusignAuthenticator DocusignAuthenticator { get; }
         private ILogger<DocusignService> Logger { get; }
         private IConfiguration Configuration { get; }
+        
+        public  ApiClient ApiClient { get; set; }
         private string AccountId { get; }
+        #endregion
 
+        #region Constructors
         public DocusignService(ILogger<DocusignService> logger, IConfiguration configuration, IDocusignAuthenticator authenticator)
         {
             this.Logger = logger;
@@ -34,14 +44,22 @@ namespace DocusignAPIDemo.Services
 
             this.AccountId = this.Configuration["Docusign:accountId"];
         }
+        #endregion
 
-        public IEnumerable<EnvelopeTemplate> GetTemplates(ApiClient apiClient, Action<EnvelopeTemplate> callback = null)
+        #region Cleanup
+        public void Dispose()
+        {
+        }
+        #endregion
+
+        #region Queries
+        public IEnumerable<EnvelopeTemplate> GetTemplates(Action<EnvelopeTemplate> callback = null)
         {               
             try
             {
-                this.DocusignAuthenticator.Authenticate(apiClient);
+                this.DocusignAuthenticator.Authenticate(ApiClient);
             
-                var templatesApi = new TemplatesApi(apiClient.Configuration);
+                var templatesApi = new TemplatesApi(ApiClient.Configuration);
                 var templates = templatesApi.ListTemplates(this.AccountId);
 
                 if (callback != null)
@@ -61,13 +79,20 @@ namespace DocusignAPIDemo.Services
             }
         }
 
-        public EnvelopeTemplate FindTemplate(ApiClient apiClient, Predicate<EnvelopeTemplate> match)
+        public EnvelopeTemplate GetTemplate(string templateName)
+        {
+            if (string.IsNullOrEmpty(templateName))
+                return null;
+            return this.FindTemplate(t => t.Name.Equals(templateName, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public EnvelopeTemplate FindTemplate(Predicate<EnvelopeTemplate> match)
         {            
             try
             {
-                this.DocusignAuthenticator.Authenticate(apiClient);
+                this.DocusignAuthenticator.Authenticate(ApiClient);
             
-                var templatesApi = new TemplatesApi(apiClient.Configuration);
+                var templatesApi = new TemplatesApi(ApiClient.Configuration);
                 var templates = templatesApi.ListTemplates(this.AccountId);
 
                 foreach (var template in templates.EnvelopeTemplates)
@@ -83,17 +108,19 @@ namespace DocusignAPIDemo.Services
                 throw;
             }
         }
+        #endregion
 
-        public EnvelopeSummary SignThroughEmail(ApiClient apiClient, DocusignSigningInfo signingInfo)
+        #region Signing
+        public EnvelopeSummary SignThroughEmail(DocusignSigningInfo signingInfo)
         {
             EnvelopeSummary result;
             
             try
             {
-                this.DocusignAuthenticator.Authenticate(apiClient);
+                this.DocusignAuthenticator.Authenticate(ApiClient);
 
-                var templatesApi = new TemplatesApi(apiClient.Configuration);
-                var envelopeApi = new EnvelopesApi(apiClient.Configuration);
+                var templatesApi = new TemplatesApi(ApiClient.Configuration);
+                var envelopeApi = new EnvelopesApi(ApiClient.Configuration);
 
                 var envelopeDefinition = this.CreateEnvelopeFromTemplate(signingInfo.EnvelopeTemplate, signingInfo.Customer);
 
@@ -108,13 +135,13 @@ namespace DocusignAPIDemo.Services
             }
         }
 
-        public ViewUrl SignThroughEmbedding(HttpRequest httpRequest, ApiClient apiClient, DocusignSigningInfo signingInfo)
+        public ViewUrl SignThroughEmbedding(HttpRequest httpRequest, DocusignSigningInfo signingInfo)
         {
             try
             {
-                this.DocusignAuthenticator.Authenticate(apiClient);
+                this.DocusignAuthenticator.Authenticate(ApiClient);
 
-                var envelopeApi = new EnvelopesApi(apiClient.Configuration);
+                var envelopeApi = new EnvelopesApi(ApiClient.Configuration);
                 var envelopeDefinition = this.CreateEnvelopeFromTemplate(signingInfo.EnvelopeTemplate, signingInfo.Customer);
                 var envelope = envelopeApi.CreateEnvelope(this.AccountId, envelopeDefinition);
 
@@ -131,8 +158,10 @@ namespace DocusignAPIDemo.Services
                 throw;
             }
         }
+        #endregion
 
-        private EnvelopeDefinition CreateEnvelopeFromTemplate(EnvelopeTemplate docusignTemplate, RobynCustomer customer)
+        #region Helpers
+        private EnvelopeDefinition CreateEnvelopeFromTemplate(EnvelopeTemplate docusignTemplate, SampleCustomer customer)
         {
             var envelopeDefinition = new EnvelopeDefinition
             {
@@ -164,7 +193,7 @@ namespace DocusignAPIDemo.Services
         /// https://developers.docusign.com/esign-rest-api/code-examples/code-example-embedded-signing
         /// https://github.com/docusign/code-examples-csharp/blob/master/launcher-csharp/Controllers/Eg001EmbeddedSigningController.cs
         /// </summary>
-        private RecipientViewRequest MakeRecipientViewRequest(HttpRequest request, RobynCustomer customer, string envelopeId)
+        private RecipientViewRequest MakeRecipientViewRequest(HttpRequest request, SampleCustomer customer, string envelopeId)
         {
             // Data for this method
             // signerEmail 
@@ -210,5 +239,6 @@ namespace DocusignAPIDemo.Services
 
             return viewRequest;
         }
+        #endregion
     }
 }

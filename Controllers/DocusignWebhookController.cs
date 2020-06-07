@@ -9,12 +9,12 @@ namespace DocusignAPIDemo.Controllers
     public class DocusignWebhookController : ControllerBase
     {
         [HttpPost]
-        public ActionResult<RobynDocumentSignedCompletetionInfo> Index()  // IMPORTANT: DO NOT USE AN ARGUMENT TO THIS FUNCTION
+        public ActionResult<SampleDocumentSignedCompletetionInfo> Index()  // IMPORTANT: DO NOT USE AN ARGUMENT TO THIS FUNCTION
         {
             if (!(new XmlSerializer(typeof(DocuSignEnvelopeInformation)).Deserialize(Request.Body) is DocuSignEnvelopeInformation envelopeInformation))
                 return null;
             
-            var documentSignedCompletetionInfo = new RobynDocumentSignedCompletetionInfo
+            var documentSignedCompletetionInfo = new SampleDocumentSignedCompletetionInfo
             {
                 Email = envelopeInformation.EnvelopeStatus.RecipientStatuses[0].RecipientStatus.Email,
                 DocumentId = envelopeInformation.EnvelopeStatus.EnvelopeID,
