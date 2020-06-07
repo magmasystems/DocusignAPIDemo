@@ -117,6 +117,8 @@ One way is to send a document to a signer through email. We can use a webhook to
 
 The other way is to embed the document signing process within the web app, and when the signer has completed the process, DocuSign redirects the user to a URL that you provide.
 
+When using embedding as a signing method, you *must* use a signerId in both the `RecipientViewRequest` object and in the `TemplateRole` in the `EnvelopeDefinition`. The signerId can be any value, as long as it's in both objects and has the same value.
+
 A good resource that discusses embedded signing is [here](https://developers.docusign.com/esign-rest-api/code-examples/code-example-embedded-signing).
 
 ## Using DocuSign Connect to Get Notifications

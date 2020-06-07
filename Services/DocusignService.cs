@@ -114,9 +114,7 @@ namespace DocusignAPIDemo.Services
             {
                 this.DocusignAuthenticator.Authenticate(apiClient);
 
-                var templatesApi = new TemplatesApi(apiClient.Configuration);
                 var envelopeApi = new EnvelopesApi(apiClient.Configuration);
-
                 var envelopeDefinition = this.CreateEnvelopeFromTemplate(signingInfo.EnvelopeTemplate, signingInfo.Customer);
                 var envelope = envelopeApi.CreateEnvelope(this.AccountId, envelopeDefinition);
 
@@ -142,7 +140,6 @@ namespace DocusignAPIDemo.Services
                 Status = "sent",
                 TemplateRoles = new List<TemplateRole> 
                 {
-                    // TODO: his is just some sample data. Replace it with the actual recipient.
                     new TemplateRole
                     {
                         Email = customer.Email, 
