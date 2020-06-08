@@ -195,12 +195,14 @@ namespace DocusignAPIDemo.Services
         /// </summary>
         private RecipientViewRequest MakeRecipientViewRequest(HttpRequest request, SampleCustomer customer, string envelopeId)
         {
-            // Data for this method
-            // signerEmail 
-            // signerName
-            // dsPingUrl -- class global
-            // signerClientId -- class global
-            // dsReturnUrl -- class global
+            // Construct the return url that Docusign will use when the signing ceremony is over
+            var returnUrlFromConfig = this.Configuration["DocuSign:returnUrlForEmbeddedSigning"];
+            var relativePath = returnUrlFromConfig ?? "Docusign/EmbeddedSigningProcessor";
+            if (relativePath.StartsWith('/'))  // strip leading slash
+                relativePath = relativePath.Substring(1);
+
+            string returnUrl = 
+                 $"{request.Scheme}://{request.Host}/{relativePath}?email={customer.Email}&envelopeId={envelopeId}";
 
             // Set the url where you want the recipient to go once they are done signing
             // should typically be a callback route somewhere in your app.
@@ -211,8 +213,7 @@ namespace DocusignAPIDemo.Services
             // can be changed/spoofed very easily.
             RecipientViewRequest viewRequest = new RecipientViewRequest
             {
-                ReturnUrl = 
-                 $"{request.Scheme}://{request.Host}/Docusign/EmbeddedSigningProcessor?email={customer.Email}&envelopeId={envelopeId}",
+                ReturnUrl = returnUrl,
 
                 // How has your app authenticated the user? In addition to your app's
                 // authentication, you can include authenticate steps from DocuSign.
