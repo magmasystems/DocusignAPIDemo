@@ -7,11 +7,18 @@
 @using (Html.BeginForm())
 {
     <div class="text-left">
+        <p><strong>Template</strong></p>
         <p>@Html.LabelFor(m => m.EnvelopeTemplate.Name, new {style = "width:200px"}) @Html.TextBoxFor(m => m.EnvelopeTemplate.Name, new {style = "width:500px"})</p>
         <p>@Html.LabelFor(m => m.EnvelopeTemplate.Uri, new {style = "width:200px"}) @Html.TextBoxFor(m => m.EnvelopeTemplate.Uri, new {style = "width:500px"})</p>
         <p>@Html.LabelFor(m => m.EnvelopeTemplate.TemplateId, new {style = "width:200px"}) @Html.TextBoxFor(m => m.EnvelopeTemplate.TemplateId, new {style = "width:500px"})</p>
+
         <hr/>
-        <p>@Html.EditorFor(m => m.Customer)</p>
+
+        <p><strong>Signer</strong></p>
+        <p>@Html.LabelFor(m => m.Customer.Name, new {style = "width:200px"}) @Html.TextBoxFor(m => m.Customer.Name, new {style = "width:500px"})</p>
+        <p>@Html.LabelFor(m => m.Customer.Email, new {style = "width:200px"}) @Html.TextBoxFor(m => m.Customer.Email, new {style = "width:500px"})</p>
+        <p>@Html.LabelFor(m => m.Customer.Title, new {style = "width:200px"}) @Html.TextBoxFor(m => m.Customer.Title, new {style = "width:500px"})</p>
+        <p>@Html.LabelFor(m => m.Customer.SignerId, new {style = "width:200px"}) @Html.TextBoxFor(m => m.Customer.SignerId, new {style = "width:500px"})</p>
     </div>
 
     <hr/>

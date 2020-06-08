@@ -1,10 +1,12 @@
 @model DocuSign.eSign.Model.EnvelopeSummary
 
 @{
-    ViewBag.Title = "DocuSign Templates";
+    ViewBag.Title = "Result from the Signing";
 }
 
 @using (Html.BeginForm())
 {
+    <p><strong>Envelope Summary</strong></p>
+    <hr/>
     @Html.EditorForModel()
 }
