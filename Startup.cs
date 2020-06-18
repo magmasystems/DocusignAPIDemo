@@ -1,3 +1,4 @@
+using System;
 using DocusignAPIDemo.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -10,7 +11,7 @@ namespace DocusignAPIDemo
 {
     public class Startup
     {
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
 
         public Startup(IConfiguration configuration)
         {
@@ -57,6 +58,16 @@ namespace DocusignAPIDemo
                     name: "default",
                     pattern: "{controller=Docusign}/{action=Index}/{id?}");
             });
+        }
+        
+        private Type GetDocumentSigningType()
+        {
+            var serviceType = Configuration["DocumentSigningService:type"];
+            if (string.IsNullOrEmpty(serviceType)) 
+                return null;
+            
+            var type = Type.GetType(serviceType);
+            return type != null ? type : null;
         }
     }
 }

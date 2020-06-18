@@ -12,16 +12,7 @@ using Microsoft.Extensions.Logging;
 namespace DocusignAPIDemo.Services
 {
     #region Interface
-    public interface IDocusignService : IDisposable
-    {
-        ApiClient ApiClient { get; set; }
 
-        IEnumerable<EnvelopeTemplate> GetTemplates(Action<EnvelopeTemplate> callback = null);
-        EnvelopeTemplate GetTemplate(string templateName);
-        EnvelopeTemplate FindTemplate(Predicate<EnvelopeTemplate> match);
-        EnvelopeSummary SignThroughEmail(DocusignSigningInfo signingInfo);
-        ViewUrl SignThroughEmbedding(HttpRequest httpRequest, DocusignSigningInfo signingInfo);
-    }
     #endregion
 
     public class DocusignService : IDocusignService
@@ -113,19 +104,17 @@ namespace DocusignAPIDemo.Services
         #region Signing
         public EnvelopeSummary SignThroughEmail(DocusignSigningInfo signingInfo)
         {
-            EnvelopeSummary result;
-            
             try
             {
                 this.DocusignAuthenticator.Authenticate(ApiClient);
 
-                var templatesApi = new TemplatesApi(ApiClient.Configuration);
+                // var templatesApi = new TemplatesApi(ApiClient.Configuration);
                 var envelopeApi = new EnvelopesApi(ApiClient.Configuration);
 
                 var envelopeDefinition = this.CreateEnvelopeFromTemplate(signingInfo.EnvelopeTemplate, signingInfo.Customer);
 
                 // This will send the document to the signer through email. We will use the webhook to detect when it was signed.
-                result = envelopeApi.CreateEnvelope(this.AccountId, envelopeDefinition);
+                var result = envelopeApi.CreateEnvelope(this.AccountId, envelopeDefinition);
                 return result;
             }
             catch (Exception e)

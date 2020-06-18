@@ -1,5 +1,3 @@
-using System;
-
 namespace DocusignAPIDemo.Models
 {
     public class ErrorViewModel

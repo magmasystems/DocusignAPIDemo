@@ -18,11 +18,14 @@ namespace DocusignAPIDemo.Services
         private static string AccessToken { get; set; }
         private static DateTime ExpiresIn;
 
-        public bool UseOldStyleAuthentication { get; set; } = false;  // this shuld come from the config file
+        public bool UseOldStyleAuthentication { get; set; } = false;
 
         public DocusignAuthenticator(IConfiguration configuration)
         {
             this.Configuration = configuration;
+
+            // If you have trouble with JWT, then we can fall back to the old-style auth of username/password
+            this.UseOldStyleAuthentication = this.Configuration.GetValue("Docusign:useOldAuth", false);
         }
 
         public void Authenticate(ApiClient apiClient)

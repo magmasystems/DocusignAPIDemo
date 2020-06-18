@@ -6,6 +6,7 @@
 # App-specific files
 Docusign.RSA.privatekey.txt
 DocusignCredentials.Development.json
+.idea/
 
 # User-specific files
 *.rsuser
