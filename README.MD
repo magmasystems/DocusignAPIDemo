@@ -22,7 +22,7 @@ We will be impersonating the admin user when we make API calls. There is a step 
 
 In your browser, enter the URL:
 
-`https://account-d.docusign.com/oauth/auth?response_type=code&scope=openid&admin_consent_scope=signature%20impersonation&client_id=xxxxxxxx-xxxx-xxxx-xxxx-9446ddb12063&redirect_uri=https://localhost:5000/Docusign`
+`https://account-d.docusign.com/oauth/auth?response_type=code&scope=signature%20impersonation&client_id=xxxxxxxx-xxxx-xxxx-xxxx-9446ddb12063&redirect_uri=https://localhost:5000/Docusign`
 
 Make sure that the `client_id` is equal to the integration key that you set up in the step above.
 
@@ -31,6 +31,10 @@ When you enter this URL into your browser, a Docusign dialog box will appear and
 The `redirect_uri` must be the same Redirect URI that you chose when you set up the application in the Docusign sandbox.
 
 Now that the application is set up, we can start coding.
+
+_Note: During the consent process, if you get a message saying that you are not a Docusign Admin, then go into the ESignature Admin dashboard and create a new organization and make sure that your existing account is linked to that new organization._
+
+![Create Docusign Org](./Documentation/Images/CreateOrg.png)
 
 ## Writing a Web App that uses DocuSign
 

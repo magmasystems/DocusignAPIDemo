@@ -69,16 +69,24 @@ namespace DocusignAPIDemo.Services
             var authServer = this.Configuration["Docusign:authServer"];
             var privateKey = System.IO.File.ReadAllBytes(this.Configuration["Docusign:privateKeyFile"]);
             
-            var authToken = apiClient.RequestJWTUserToken(
-                clientId,
-                impersonatedUserGuid,
-                authServer,
-                privateKey,
-                1);
+            try
+            {
+                var authToken = apiClient.RequestJWTUserToken(
+                    clientId,
+                    impersonatedUserGuid,
+                    authServer,
+                    privateKey,
+                    1);
 
-            AccessToken = authToken.access_token;
-            if (authToken.expires_in != null) 
-                ExpiresIn = DateTime.UtcNow.AddSeconds(authToken.expires_in.Value);
+                AccessToken = authToken.access_token;
+                if (authToken.expires_in != null) 
+                    ExpiresIn = DateTime.UtcNow.AddSeconds(authToken.expires_in.Value);
+            }
+            catch (Exception exc)
+            {
+                Console.WriteLine(exc.Message);
+                throw;
+            }
         }
     }
 }

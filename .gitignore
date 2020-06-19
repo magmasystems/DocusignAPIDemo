@@ -4,8 +4,8 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 # App-specific files
-Docusign.RSA.privatekey.txt
-DocusignCredentials.Development.json
+Docusign.RSA.privatekey.*.txt
+DocusignCredentials.*.json
 .idea/
 
 # User-specific files
